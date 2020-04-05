@@ -66,19 +66,19 @@ trait ApplicationOptionsProviderTrait
 
         $options = $options[$this->applicationOptionsKey];
 
-        if (!is_array($options) && !$options instanceof \ArrayAccess) {
+        if ($options instanceof \Traversable) {
+            $options = iterator_to_array($options, true);
+        }
+
+        if (!is_array($options)) {
             throw new ServiceNotCreatedException(
                 sprintf(
                     'The application options must be an \'array\' or object of type \'%s\'; \'%s\' provided in \'%s\'.',
-                    \ArrayAccess::class,
+                    \Traversable::class,
                     gettype($options),
                     __METHOD__
                 )
             );
-        }
-
-        if (!is_array($options)) {
-            $options = iterator_to_array($options, true);
         }
 
         return $options;
