@@ -1,0 +1,32 @@
+{
+  "name" : "alex-patterson-webdev/laminas-factory",
+  "version": "1.0.0",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=7.2",
+    "laminas/laminas-servicemanager": "^3.3"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.5",
+    "phpunit/phpunit" : "^8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Arp\\LaminasFactory\\" : "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ArpTest\\LaminasFactory\\" : "test/phpunit"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --coverage-clover=coverage.xml"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "optimize-autoloader": true,
+    "sort-packages": true
+  }
+}
