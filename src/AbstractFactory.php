@@ -9,7 +9,6 @@ use Arp\LaminasFactory\Exception\ServiceNotFoundException;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Psr\Container\ContainerExceptionInterface;
 
 /**
  * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
@@ -88,7 +87,7 @@ abstract class AbstractFactory implements FactoryInterface
     ) {
         try {
             return $serviceLocator->build($name, $options);
-        } catch (ContainerExceptionInterface $e) {
+        } catch (\Throwable $e) {
             throw new ServiceNotCreatedException(
                 sprintf(
                     'Failed to build service \'%s\' required as dependency of service \'%s\' : %s',
