@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arp\LaminasFactory;
 
 use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\AbstractPluginManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -37,18 +38,13 @@ trait ServiceOptionsProviderTrait
     public function getServiceOptions(ContainerInterface $container, string $requestedName, $key = null): array
     {
         $applicationOptions = $this->getApplicationOptions($container);
+        $serviceOptionsKey = $this->getServiceOptionsKey($key);
 
-        if (null !== $key) {
-            $this->setServiceOptionsKey($key);
-        }
-
-        $key = $this->serviceOptionsKey;
-
-        if (!array_key_exists($key, $applicationOptions)) {
+        if (!array_key_exists($serviceOptionsKey, $applicationOptions)) {
             throw new ServiceNotCreatedException(
                 sprintf(
                     'Unable to find a configuration key for service of type \'%s\' while creating service \'%s\'.',
-                    $key,
+                    $serviceOptionsKey,
                     $requestedName
                 )
             );
@@ -58,29 +54,36 @@ trait ServiceOptionsProviderTrait
             ? $this->factoryOptions
             : [];
 
-        if (isset($applicationOptions[$key][$requestedName])) {
-            if (!is_array($applicationOptions[$key][$requestedName])) {
+        if (isset($applicationOptions[$serviceOptionsKey][$requestedName])) {
+            if (!is_array($applicationOptions[$serviceOptionsKey][$requestedName])) {
                 throw new ServiceNotCreatedException(
                     sprintf(
                         'The configuration options must be of type \'array\'; \'%s\' provided for service \'%s\'.',
-                        gettype($applicationOptions[$key][$requestedName]),
+                        gettype($applicationOptions[$serviceOptionsKey][$requestedName]),
                         $requestedName
                     )
                 );
             }
-            $serviceOptions = array_replace_recursive($serviceOptions, $applicationOptions[$key][$requestedName]);
+            $serviceOptions = array_replace_recursive(
+                $serviceOptions,
+                $applicationOptions[$serviceOptionsKey][$requestedName]
+            );
         }
 
         return $serviceOptions;
     }
 
     /**
-     * Set the key used to load the service options.
+     * @param string|null $key
      *
-     * @param string $serviceOptionsKey
+     * @return string
      */
-    public function setServiceOptionsKey(string $serviceOptionsKey): void
+    private function getServiceOptionsKey(?string $key): string
     {
-        $this->serviceOptionsKey = $serviceOptionsKey;
+        if (null === $key) {
+            return $this->serviceOptionsKey;
+        }
+
+        return $key;
     }
 }

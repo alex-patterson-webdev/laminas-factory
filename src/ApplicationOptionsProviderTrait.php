@@ -6,6 +6,7 @@ namespace Arp\LaminasFactory;
 
 use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
 use Arp\LaminasFactory\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\AbstractPluginManager;
 use Psr\Container\ContainerInterface;
 
 /**
