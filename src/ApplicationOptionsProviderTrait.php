@@ -6,7 +6,6 @@ namespace Arp\LaminasFactory;
 
 use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
 use Arp\LaminasFactory\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\AbstractPluginManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -20,12 +19,12 @@ trait ApplicationOptionsProviderTrait
     /**
      * @var string
      */
-    protected $applicationOptionsKey = 'arp';
+    protected string $applicationOptionsKey = 'arp';
 
     /**
      * @var string
      */
-    private $applicationOptionsService = 'config';
+    private string $applicationOptionsService = 'config';
 
     /**
      * Return an array of application options.

@@ -24,7 +24,7 @@ abstract class AbstractFactory implements FactoryInterface
     /**
      * @var array
      */
-    protected $factoryOptions = [];
+    protected array $factoryOptions = [];
 
     /**
      * @param array $factoryOptions
