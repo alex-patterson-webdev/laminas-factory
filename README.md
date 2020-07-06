@@ -6,10 +6,13 @@
 
 ## About
 
-Configuration based factory components for use with the Laminas Framework.
+The Laminas Framework provides the ability to inject class dependencies into services via 'service factories', these are classes that implement
+the interface `Laminas\ServiceManager\Factory\FactoryInterface`. This module provides components to aid with the creation of the service factories 
+by allowing developers to easily fetch service specific configuration options from within the factory.
 
 ## Installation
 
 Installation via [composer](https://getcomposer.org).
 
     require alex-patterson-webdev/laminas-factory ^1
+

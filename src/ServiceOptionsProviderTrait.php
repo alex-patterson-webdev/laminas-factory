@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Arp\LaminasFactory;
 
 use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\AbstractPluginManager;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -24,7 +23,7 @@ trait ServiceOptionsProviderTrait
     /**
      * @var string
      */
-    private $serviceOptionsKey = 'services';
+    private string $serviceOptionsKey = 'services';
 
     /**
      * @param ContainerInterface $container     The dependency injection container.
