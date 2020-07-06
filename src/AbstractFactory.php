@@ -41,12 +41,13 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @return mixed
      *
+     * @throws ServiceNotCreatedException If the requested service cannot be created.
      * @throws ServiceNotFoundException If the requested service cannot be loaded.
      */
     protected function getService(ContainerInterface $container, string $name, string $requestedName)
     {
         if ($name === $requestedName) {
-            throw new ServiceNotFoundException(
+            throw new ServiceNotCreatedException(
                 sprintf(
                     'Encountered a circular dependency reference for service \'%s\'.',
                     $requestedName
