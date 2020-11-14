@@ -55,7 +55,7 @@ abstract class AbstractFactory implements FactoryInterface
             );
         }
 
-        if (!$container->has($name)) {
+        if (!$container->has($name) && !class_exists($name, true)) {
             throw new ServiceNotFoundException(
                 sprintf(
                     'The required \'%s\' dependency could not be found while creating service \'%s\'.',
