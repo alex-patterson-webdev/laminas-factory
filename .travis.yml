@@ -4,10 +4,10 @@ php:
   - 7.4
 
 install:
-  - travis_retry composer install --no-interaction --no-suggest
+  - travis_retry composer install -vvv --no-interaction --no-suggest
 
 script:
-  - composer test
+  - composer unit
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
