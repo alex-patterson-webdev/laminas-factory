@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Arp\LaminasFactory;
 
-use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
-use Arp\LaminasFactory\Exception\ServiceNotFoundException;
 use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 

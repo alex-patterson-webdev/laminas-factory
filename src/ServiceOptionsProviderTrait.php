@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arp\LaminasFactory;
 
-use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -28,7 +28,7 @@ trait ServiceOptionsProviderTrait
     /**
      * @param ContainerInterface $container     The dependency injection container.
      * @param string             $requestedName The name of the service being created.
-     * @param string             $key           The type of service that should be checked.
+     * @param string|null        $key           The type of service that should be checked.
      *
      * @return array
      *
@@ -79,10 +79,6 @@ trait ServiceOptionsProviderTrait
      */
     private function getServiceOptionsKey(?string $key): string
     {
-        if (null === $key) {
-            return $this->serviceOptionsKey;
-        }
-
-        return $key;
+        return $key ?? $this->serviceOptionsKey;
     }
 }
