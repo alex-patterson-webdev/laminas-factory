@@ -20,7 +20,7 @@
     }
   },
   "scripts": {
-    "unit": "php vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml"
+    "unit": "php vendor/bin/phpunit --coverage-clover=coverage.xml"
   },
   "config": {
     "preferred-install": "dist",
