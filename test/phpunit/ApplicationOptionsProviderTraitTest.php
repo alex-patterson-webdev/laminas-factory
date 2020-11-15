@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ArpTest\LaminasFactory;
 
 use Arp\LaminasFactory\ApplicationOptionsProviderTrait;
-use Arp\LaminasFactory\Exception\ServiceNotCreatedException;
-use Arp\LaminasFactory\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -25,12 +25,12 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
     /**
      * @var string
      */
-    private $optionsKey = 'arp';
+    private string $optionsKey = 'arp';
 
     /**
      * @var string
      */
-    private $optionsService = 'config';
+    private string $optionsService = 'config';
 
     /**
      * Setup the test dependencies.

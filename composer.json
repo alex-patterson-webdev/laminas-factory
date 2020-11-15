@@ -16,7 +16,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "ArpTest\\LaminasFactory\\" : "test/phpunit"
+      "ArpTest\\LaminasFactory\\" : "test/phpunit/"
     }
   },
   "scripts": {
