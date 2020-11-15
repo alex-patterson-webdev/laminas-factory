@@ -14,5 +14,5 @@ by allowing developers to easily fetch service specific configuration options fr
 
 Installation via [composer](https://getcomposer.org).
 
-    composer require alex-patterson-webdev/laminas-factory ^1
+    composer require alex-patterson-webdev/laminas-factory ^1.1
 
