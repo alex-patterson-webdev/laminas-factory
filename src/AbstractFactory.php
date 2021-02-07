@@ -22,14 +22,14 @@ abstract class AbstractFactory implements FactoryInterface
     use ServiceOptionsProviderTrait;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected array $factoryOptions = [];
+    protected ?array $factoryOptions = null;
 
     /**
-     * @param array $factoryOptions
+     * @param array|null $factoryOptions
      */
-    public function __construct(array $factoryOptions = [])
+    public function __construct(array $factoryOptions = null)
     {
         $this->factoryOptions = $factoryOptions;
     }
