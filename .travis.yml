@@ -17,7 +17,7 @@ install:
   - travis_retry composer install $COMPOSER_ARGS
 
 script:
-  - composer test
+  - composer unit-test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

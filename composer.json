@@ -26,7 +26,7 @@
     }
   },
   "scripts": {
-    "unit": "php vendor/bin/phpunit"
+    "unit-test": "php vendor/bin/phpunit"
   },
   "config": {
     "optimize-autoloader": true,
