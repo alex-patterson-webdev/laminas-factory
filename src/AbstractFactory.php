@@ -46,15 +46,6 @@ abstract class AbstractFactory implements FactoryInterface
      */
     protected function getService(ContainerInterface $container, string $name, string $requestedName)
     {
-        if ($name === $requestedName) {
-            throw new ServiceNotCreatedException(
-                sprintf(
-                    'Encountered a circular dependency reference for service \'%s\'.',
-                    $requestedName
-                )
-            );
-        }
-
         if (!$container->has($name) && !class_exists($name, true)) {
             throw new ServiceNotFoundException(
                 sprintf(
