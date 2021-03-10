@@ -7,14 +7,13 @@ namespace Arp\LaminasFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
  * @package Arp\LaminasFactory
  */
-abstract class AbstractFactory implements FactoryInterface
+abstract class AbstractFactory
 {
     /**
      * @trait ServiceOptionsProviderTrait
