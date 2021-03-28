@@ -32,9 +32,10 @@ trait ApplicationOptionsProviderTrait
      * @param ContainerInterface $container
      * @param string|null        $optionsKey
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws ServiceNotFoundException
+     * @throws ServiceNotCreatedException
      */
     public function getApplicationOptions(ContainerInterface $container, string $optionsKey = null): array
     {

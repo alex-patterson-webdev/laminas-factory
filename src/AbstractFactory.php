@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Arp\LaminasFactory;
 
-use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
  * @package Arp\LaminasFactory
  */
-abstract class AbstractFactory
+abstract class AbstractFactory implements FactoryInterface
 {
     /**
      * @trait ServiceOptionsProviderTrait
@@ -21,12 +21,12 @@ abstract class AbstractFactory
     use ServiceOptionsProviderTrait;
 
     /**
-     * @var array|null
+     * @var array<mixed>|null
      */
     protected ?array $factoryOptions = null;
 
     /**
-     * @param array|null $factoryOptions
+     * @param array<mixed>|null $factoryOptions
      */
     public function __construct(array $factoryOptions = null)
     {
@@ -40,22 +40,34 @@ abstract class AbstractFactory
      *
      * @return mixed
      *
-     * @throws ServiceNotCreatedException If the requested service cannot be created.
-     * @throws ServiceNotFoundException If the requested service cannot be loaded.
+     * @throws ServiceNotCreatedException
+     * @throws ServiceNotFoundException
      */
     protected function getService(ContainerInterface $container, string $name, string $requestedName)
     {
         if (!$container->has($name) && !class_exists($name, true)) {
             throw new ServiceNotFoundException(
                 sprintf(
-                    'The required \'%s\' dependency could not be found while creating service \'%s\'.',
+                    'The required \'%s\' dependency could not be found while creating service \'%s\'',
                     $name,
                     $requestedName
                 )
             );
         }
 
-        return $container->get($name);
+        try {
+            return $container->get($name);
+        } catch (\Exception $e) {
+            throw new ServiceNotCreatedException(
+                sprintf(
+                    'The required \'%s\' dependency could not be created for service \'%s\'',
+                    $name,
+                    $requestedName
+                ),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 
     /**
@@ -63,7 +75,7 @@ abstract class AbstractFactory
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @param string                  $name
-     * @param array|null              $options
+     * @param array<mixed>|null       $options
      * @param string                  $requestedName
      *
      * @return mixed
@@ -78,7 +90,7 @@ abstract class AbstractFactory
     ) {
         try {
             return $serviceLocator->build($name, $options);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw new ServiceNotCreatedException(
                 sprintf(
                     'Failed to build service \'%s\' required as dependency of service \'%s\' : %s',

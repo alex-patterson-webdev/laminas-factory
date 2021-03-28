@@ -31,7 +31,7 @@ trait ServiceOptionsProviderTrait
      * @param string             $requestedName The name of the service being created.
      * @param string|null        $key           The type of service that should be checked.
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
