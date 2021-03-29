@@ -37,7 +37,7 @@ trait ApplicationOptionsProviderTrait
      * @throws ServiceNotFoundException
      * @throws ServiceNotCreatedException
      */
-    public function getApplicationOptions(ContainerInterface $container, string $optionsKey = null): array
+    public function getApplicationOptions(ContainerInterface $container, ?string $optionsKey = null): array
     {
         if (null !== $optionsKey) {
             $this->setApplicationOptionsKey($optionsKey);

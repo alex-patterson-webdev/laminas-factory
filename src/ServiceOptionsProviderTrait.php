@@ -27,16 +27,16 @@ trait ServiceOptionsProviderTrait
     private string $serviceOptionsKey = 'services';
 
     /**
-     * @param ContainerInterface $container     The dependency injection container.
-     * @param string             $requestedName The name of the service being created.
-     * @param string|null        $key           The type of service that should be checked.
+     * @param ContainerInterface $container     The dependency injection container
+     * @param string             $requestedName The name of the service being created
+     * @param string|null        $key           The type of service that should be checked
      *
      * @return array<mixed>
      *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      */
-    public function getServiceOptions(ContainerInterface $container, string $requestedName, $key = null): array
+    public function getServiceOptions(ContainerInterface $container, string $requestedName, ?string $key = null): array
     {
         $applicationOptions = $this->getApplicationOptions($container);
         $serviceOptionsKey = $this->getServiceOptionsKey($key);
