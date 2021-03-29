@@ -51,8 +51,9 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotFoundExceptionIfTheOptionsServiceCannotBeFound(): void
     {
-        /** @var ApplicationOptionsProviderTrait&MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class() {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
@@ -81,8 +82,9 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheReturnedOptionsServiceIsNotAnArray(): void
     {
-        /** @var ApplicationOptionsProviderTrait&MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class() {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
@@ -117,8 +119,9 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheReturnedOptionsServiceIsMissingOptionsKey(): void
     {
-        /** @var ApplicationOptionsProviderTrait&MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class() {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
@@ -154,8 +157,9 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheServiceOptionsAreNotOfTypeArray(): void
     {
-        /** @var ApplicationOptionsProviderTrait&MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class() {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
