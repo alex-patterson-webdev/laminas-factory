@@ -11,17 +11,14 @@
 >
     <testsuites>
         <testsuite name="LaminasFactory">
-            <directory>./test/phpunit</directory>
+            <directory>./test/unit</directory>
         </testsuite>
     </testsuites>
+
     <coverage processUncoveredFiles="false">
         <include>
             <directory suffix=".php">src</directory>
         </include>
-        <report>
-            <clover outputFile="coverage.xml"/>
-        </report>
     </coverage>
-    <logging/>
 </phpunit>
 

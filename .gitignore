@@ -2,5 +2,5 @@ vendor/
 .idea/
 composer.phar
 .phpunit.result.cache
-coverage.xml
-clover.xml
+.php_cs.cache
+test/coverage/clover.xml
