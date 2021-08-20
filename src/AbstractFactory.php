@@ -7,6 +7,7 @@ namespace Arp\LaminasFactory;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -63,6 +64,8 @@ abstract class AbstractFactory implements FactoryInterface
 
         try {
             return $container->get($name);
+        } catch (ContainerExceptionInterface $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new ServiceNotCreatedException(
                 sprintf(
