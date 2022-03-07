@@ -47,7 +47,7 @@ final class AbstractFactoryTest extends TestCase
      */
     public function testImplementsFactoryInterface(): void
     {
-        $factory = new class() extends AbstractFactory {
+        $factory = new class () extends AbstractFactory {
             /**
              * @param ContainerInterface $container
              * @param string             $requestedName

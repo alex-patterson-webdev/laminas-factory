@@ -51,7 +51,7 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotFoundExceptionIfTheOptionsServiceCannotBeFound(): void
     {
-        $subject = new class() {
+        $subject = new class () {
             use ApplicationOptionsProviderTrait;
         };
 
@@ -82,7 +82,7 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheReturnedOptionsServiceIsNotAnArray(): void
     {
-        $subject = new class() {
+        $subject = new class () {
             use ApplicationOptionsProviderTrait;
         };
 
@@ -119,7 +119,7 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheReturnedOptionsServiceIsMissingOptionsKey(): void
     {
-        $subject = new class() {
+        $subject = new class () {
             use ApplicationOptionsProviderTrait;
         };
 
@@ -157,7 +157,7 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheServiceOptionsAreNotOfTypeArray(): void
     {
-        $subject = new class() {
+        $subject = new class () {
             use ApplicationOptionsProviderTrait;
         };
 
