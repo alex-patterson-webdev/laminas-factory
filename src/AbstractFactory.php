@@ -52,7 +52,7 @@ abstract class AbstractFactory implements FactoryInterface
             return $name;
         }
 
-        if (!$container->has($name) && !class_exists($name, true)) {
+        if (!class_exists($name, true) && !$container->has($name)) {
             throw new ServiceNotFoundException(
                 sprintf(
                     'The required \'%s\' dependency could not be found while creating service \'%s\'',
@@ -63,6 +63,7 @@ abstract class AbstractFactory implements FactoryInterface
         }
 
         try {
+            /** @throws \Exception */
             return $container->get($name);
         } catch (ContainerExceptionInterface $e) {
             throw $e;
