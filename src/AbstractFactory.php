@@ -7,6 +7,7 @@ namespace Arp\LaminasFactory;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -35,7 +36,7 @@ abstract class AbstractFactory implements FactoryInterface
 
     /**
      * @param ContainerInterface $container     The dependency injection container.
-     * @param string             $name          The name of the service to retrieved.
+     * @param mixed              $name          The name of the service to retrieved.
      * @param string             $requestedName The service that is being created.
      *
      * @return mixed
@@ -43,8 +44,14 @@ abstract class AbstractFactory implements FactoryInterface
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      */
-    protected function getService(ContainerInterface $container, string $name, string $requestedName)
+    protected function getService(ContainerInterface $container, $name, string $requestedName)
     {
+        // Returning non-string arguments reduces factory logic for options that may have already
+        // been resolved to the required services
+        if (!is_string($name)) {
+            return $name;
+        }
+
         if (!$container->has($name) && !class_exists($name, true)) {
             throw new ServiceNotFoundException(
                 sprintf(
@@ -57,6 +64,8 @@ abstract class AbstractFactory implements FactoryInterface
 
         try {
             return $container->get($name);
+        } catch (ContainerExceptionInterface $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new ServiceNotCreatedException(
                 sprintf(
