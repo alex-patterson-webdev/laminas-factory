@@ -6,6 +6,7 @@ namespace Arp\LaminasFactory;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -35,6 +36,7 @@ trait ServiceOptionsProviderTrait
      *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
+     * @throws ContainerExceptionInterface
      */
     public function getServiceOptions(ContainerInterface $container, string $requestedName, ?string $key = null): array
     {

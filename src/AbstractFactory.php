@@ -91,7 +91,8 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @return mixed
      *
-     * @throws ServiceNotCreatedException  If the service cannot be built.
+     * @throws ServiceNotCreatedException
+     * @throws ContainerExceptionInterface
      */
     protected function buildService(
         ServiceLocatorInterface $serviceLocator,
