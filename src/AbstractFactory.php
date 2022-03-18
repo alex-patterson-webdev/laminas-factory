@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Arp\LaminasFactory;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
@@ -22,50 +22,63 @@ abstract class AbstractFactory implements FactoryInterface
     use ServiceOptionsProviderTrait;
 
     /**
-     * @var array
+     * @var array<mixed>|null
      */
-    protected array $factoryOptions = [];
+    protected ?array $factoryOptions = null;
 
     /**
-     * @param array $factoryOptions
+     * @param array<mixed>|null $factoryOptions
      */
-    public function __construct(array $factoryOptions = [])
+    public function __construct(array $factoryOptions = null)
     {
         $this->factoryOptions = $factoryOptions;
     }
 
     /**
      * @param ContainerInterface $container     The dependency injection container.
-     * @param string             $name          The name of the service to retrieved.
+     * @param mixed              $name          The name of the service to retrieved.
      * @param string             $requestedName The service that is being created.
      *
      * @return mixed
      *
-     * @throws ServiceNotCreatedException If the requested service cannot be created.
-     * @throws ServiceNotFoundException If the requested service cannot be loaded.
+     * @throws ServiceNotCreatedException
+     * @throws ServiceNotFoundException
+     * @throws ContainerExceptionInterface
      */
-    protected function getService(ContainerInterface $container, string $name, string $requestedName)
+    protected function getService(ContainerInterface $container, $name, string $requestedName)
     {
-        if ($name === $requestedName) {
-            throw new ServiceNotCreatedException(
-                sprintf(
-                    'Encountered a circular dependency reference for service \'%s\'.',
-                    $requestedName
-                )
-            );
+        // Returning non-string arguments reduces factory logic for options that may have already
+        // been resolved to the required services
+        if (!is_string($name)) {
+            return $name;
         }
 
-        if (!$container->has($name) && !class_exists($name, true)) {
+        if (!class_exists($name, true) && !$container->has($name)) {
             throw new ServiceNotFoundException(
                 sprintf(
-                    'The required \'%s\' dependency could not be found while creating service \'%s\'.',
+                    'The required \'%s\' dependency could not be found while creating service \'%s\'',
                     $name,
                     $requestedName
                 )
             );
         }
 
-        return $container->get($name);
+        try {
+            /** @throws \Exception */
+            return $container->get($name);
+        } catch (ContainerExceptionInterface $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw new ServiceNotCreatedException(
+                sprintf(
+                    'The required \'%s\' dependency could not be created for service \'%s\'',
+                    $name,
+                    $requestedName
+                ),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 
     /**
@@ -73,12 +86,13 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @param string                  $name
-     * @param array|null              $options
+     * @param array<mixed>|null       $options
      * @param string                  $requestedName
      *
      * @return mixed
      *
-     * @throws ServiceNotCreatedException  If the service cannot be built.
+     * @throws ServiceNotCreatedException
+     * @throws ContainerExceptionInterface
      */
     protected function buildService(
         ServiceLocatorInterface $serviceLocator,
@@ -88,7 +102,7 @@ abstract class AbstractFactory implements FactoryInterface
     ) {
         try {
             return $serviceLocator->build($name, $options);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw new ServiceNotCreatedException(
                 sprintf(
                     'Failed to build service \'%s\' required as dependency of service \'%s\' : %s',

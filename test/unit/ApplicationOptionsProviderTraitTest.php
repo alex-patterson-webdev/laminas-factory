@@ -12,13 +12,15 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
+ * @covers  \Arp\LaminasFactory\ApplicationOptionsProviderTrait
+ *
  * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
  * @package ArpTest\LaminasFactory
  */
 final class ApplicationOptionsProviderTraitTest extends TestCase
 {
     /**
-     * @var ContainerInterface|MockObject
+     * @var ContainerInterface&MockObject
      */
     private $container;
 
@@ -37,17 +39,21 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->container = $this->getMockForAbstractClass(ContainerInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
     }
 
     /**
      * Assert that the getApplicationOptions() method will throw a ServiceNotFoundException if the configured
      * application service cannot be found within the container.
+     *
+     * @throws ServiceNotCreatedException
+     * @throws ServiceNotFoundException
      */
     public function testWillThrowServiceNotFoundExceptionIfTheOptionsServiceCannotBeFound(): void
     {
-        /** @var ApplicationOptionsProviderTrait|MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class () {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
@@ -70,23 +76,25 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
     /**
      * Assert that a ServiceNotCreatedException is thrown when the returned ApplicationOptionsService is not of
      * type array.
+     *
+     * @throws ServiceNotCreatedException
+     * @throws ServiceNotFoundException
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheReturnedOptionsServiceIsNotAnArray(): void
     {
-        /** @var ApplicationOptionsProviderTrait|MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class () {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
             ->with($this->optionsService)
             ->willReturn(true);
 
-        $invalid = false; // non-array value
-
         $this->container->expects($this->once())
             ->method('get')
             ->with($this->optionsService)
-            ->willReturn($invalid);
+            ->willReturn(false);
 
         $this->expectException(ServiceNotCreatedException::class);
         $this->expectExceptionMessage(
@@ -103,11 +111,15 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
     /**
      * Assert that a ServiceNotCreatedException is thrown when the returned ApplicationOptionsService does not
      * container a array key matching the options key.
+     *
+     * @throws ServiceNotCreatedException
+     * @throws ServiceNotFoundException
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheReturnedOptionsServiceIsMissingOptionsKey(): void
     {
-        /** @var ApplicationOptionsProviderTrait|MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class () {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')
@@ -137,11 +149,15 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
 
     /**
      * Assert that a ServiceNotCreatedException is thrown when the resolved service options are not of type array.
+     *
+     * @throws ServiceNotCreatedException
+     * @throws ServiceNotFoundException
      */
     public function testWillThrowServiceNotCreatedExceptionIfTheServiceOptionsAreNotOfTypeArray(): void
     {
-        /** @var ApplicationOptionsProviderTrait|MockObject $subject */
-        $subject = $this->getMockForTrait(ApplicationOptionsProviderTrait::class);
+        $subject = new class () {
+            use ApplicationOptionsProviderTrait;
+        };
 
         $this->container->expects($this->once())
             ->method('has')

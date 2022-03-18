@@ -6,10 +6,11 @@ namespace Arp\LaminasFactory;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * Trait used to provided the application options to a factory.
+ * Trait used to provide the application options to a factory.
  *
  * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
  * @package Arp\LaminasFactory
@@ -32,11 +33,13 @@ trait ApplicationOptionsProviderTrait
      * @param ContainerInterface $container
      * @param string|null        $optionsKey
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws ServiceNotFoundException
+     * @throws ServiceNotCreatedException
+     * @throws ContainerExceptionInterface
      */
-    public function getApplicationOptions(ContainerInterface $container, string $optionsKey = null): array
+    public function getApplicationOptions(ContainerInterface $container, ?string $optionsKey = null): array
     {
         if (null !== $optionsKey) {
             $this->setApplicationOptionsKey($optionsKey);
