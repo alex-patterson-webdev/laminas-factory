@@ -91,12 +91,10 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
             ->with($this->optionsService)
             ->willReturn(true);
 
-        $invalid = false; // non-array value
-
         $this->container->expects($this->once())
             ->method('get')
             ->with($this->optionsService)
-            ->willReturn($invalid);
+            ->willReturn(false);
 
         $this->expectException(ServiceNotCreatedException::class);
         $this->expectExceptionMessage(

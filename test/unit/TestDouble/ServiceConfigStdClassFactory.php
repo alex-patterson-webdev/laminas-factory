@@ -2,19 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ArpTest\LaminasFactory\Stub;
+namespace ArpTest\LaminasFactory\TestDouble;
 
 use Arp\LaminasFactory\AbstractFactory;
 use Psr\Container\ContainerInterface;
 
-/**
- * Stub factory class to allow use to test the AbstractFactory, ApplicationOptionProviderTrait and ServiceOptionsTrait
- * with a concrete implementation
- *
- * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
- * @package ArpTest\LaminasFactory\Stub
- */
-class StdClassFactory extends AbstractFactory
+class ServiceConfigStdClassFactory extends AbstractFactory
 {
     /**
      * @var array<mixed>|null

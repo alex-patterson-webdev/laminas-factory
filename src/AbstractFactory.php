@@ -43,6 +43,7 @@ abstract class AbstractFactory implements FactoryInterface
      *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
+     * @throws ContainerExceptionInterface
      */
     protected function getService(ContainerInterface $container, $name, string $requestedName)
     {

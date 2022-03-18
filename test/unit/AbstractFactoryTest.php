@@ -6,9 +6,13 @@ namespace ArpTest\LaminasFactory;
 
 use Arp\LaminasFactory\AbstractFactory;
 use Arp\LaminasFactory\FactoryInterface;
-use ArpTest\LaminasFactory\Stub\StdClassFactory;
+use ArpTest\LaminasFactory\TestDouble\GetServiceStdClassFactory;
+use ArpTest\LaminasFactory\TestDouble\ServiceConfigStdClassFactory;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -87,7 +91,7 @@ final class AbstractFactoryTest extends TestCase
             ],
         ];
 
-        $factory = new StdClassFactory();
+        $factory = new ServiceConfigStdClassFactory();
 
         $this->container->expects($this->once())
             ->method('has')
@@ -102,5 +106,104 @@ final class AbstractFactoryTest extends TestCase
         $stdObject = $factory($this->container, $this->serviceName, $this->options);
 
         $this->assertSame($applicationOptions['arp']['services'][\stdClass::class], $stdObject->options);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     */
+    public function testGetServiceWillReturnServiceNameWhenProvidedNonStringValue(): void
+    {
+        $dependency = new \stdClass();
+
+        $factory = new GetServiceStdClassFactory($dependency);
+
+        $createdService = $factory($this->container, 'foo');
+
+        $this->assertSame($createdService->dependency, $dependency);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     */
+    public function testGetServiceWillThrowServiceNotCreatedExceptionIfTheProvidedServiceIsNotAValidService(): void
+    {
+        $requestedName = 'FooService';
+        $dependencyName = 'BarService';
+
+        $factory = new GetServiceStdClassFactory($dependencyName);
+
+        $this->container->expects($this->once())
+            ->method('has')
+            ->with($dependencyName)
+            ->willReturn(false);
+
+        $this->expectException(ServiceNotFoundException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'The required \'%s\' dependency could not be found while creating service \'%s\'',
+                $dependencyName,
+                $requestedName
+            )
+        );
+
+        $factory($this->container, $requestedName);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     */
+    public function testGetServiceWillReThrowContainerContainerExceptionInterfaceErrors(): void
+    {
+        $requestedName = 'FooService';
+        $dependencyName = \stdClass::class;
+
+        $factory = new GetServiceStdClassFactory($dependencyName);
+
+        /** @var ContainerException&MockObject $exception */
+        $exception = $this->getMockForAbstractClass(ContainerException::class);
+
+        $this->container->expects($this->once())
+            ->method('get')
+            ->with($dependencyName)
+            ->willThrowException($exception);
+
+        $this->expectException(ContainerException::class);
+
+        $factory($this->container, $requestedName);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     */
+    public function testGetServiceWillReThrowExceptionErrors(): void
+    {
+        $requestedName = 'FooService';
+        $dependencyName = \stdClass::class;
+
+        $factory = new GetServiceStdClassFactory($dependencyName);
+
+        $exceptionCode = 777;
+        /** @var ContainerException&MockObject $exception */
+        $exception = new \Exception(
+            'This is a test exception for test ' . __FUNCTION__,
+            $exceptionCode
+        );
+
+        $this->container->expects($this->once())
+            ->method('get')
+            ->with($dependencyName)
+            ->willThrowException($exception);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode($exceptionCode);
+        $this->expectExceptionMessage(
+            sprintf(
+                'The required \'%s\' dependency could not be created for service \'%s\'',
+                $dependencyName,
+                $requestedName
+            )
+        );
+
+        $factory($this->container, $requestedName);
     }
 }
