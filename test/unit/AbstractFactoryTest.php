@@ -16,21 +16,15 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * @covers  \Arp\LaminasFactory\AbstractFactory
- *
- * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
- * @package ArpTest\LaminasFactory
+ * @covers \Arp\LaminasFactory\AbstractFactory
  */
 final class AbstractFactoryTest extends TestCase
 {
     /**
      * @var ContainerInterface&MockObject
      */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var string
-     */
     private string $serviceName = \stdClass::class;
 
     /**
@@ -38,17 +32,11 @@ final class AbstractFactoryTest extends TestCase
      */
     private ?array $options = null;
 
-    /**
-     * Prepare the test case dependencies
-     */
     public function setUp(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);
     }
 
-    /**
-     * Assert that the factory implements FactoryInterface
-     */
     public function testImplementsFactoryInterface(): void
     {
         $factory = new class () extends AbstractFactory {
@@ -71,9 +59,6 @@ final class AbstractFactoryTest extends TestCase
         $this->assertInstanceOf(FactoryInterface::class, $factory);
     }
 
-    /**
-     * Assert the stdClass can be correctly configured and returned from __invoke()
-     */
     public function testInvokeWillReturnConfiguredStdClass(): void
     {
         $applicationOptionsService = 'config';

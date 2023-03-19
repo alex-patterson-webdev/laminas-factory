@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArpTest\LaminasFactory\TestDouble;
 
 use Arp\LaminasFactory\AbstractFactory;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 class ServiceConfigStdClassFactory extends AbstractFactory
@@ -36,11 +37,7 @@ class ServiceConfigStdClassFactory extends AbstractFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array<mixed>|null  $options
-     *
-     * @return \stdClass
+     * @param array<mixed>|null $options
      */
     public function __invoke(
         ContainerInterface $container,
@@ -56,10 +53,8 @@ class ServiceConfigStdClassFactory extends AbstractFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     * @param string|null        $optionsKey
-     *
      * @return array<mixed>
+     * @throws ContainerExceptionInterface
      */
     public function getApplicationOptions(ContainerInterface $container, ?string $optionsKey = null): array
     {
@@ -67,11 +62,8 @@ class ServiceConfigStdClassFactory extends AbstractFactory
     }
 
     /**
-     * @param ContainerInterface $container     The dependency injection container
-     * @param string             $requestedName The name of the service being created
-     * @param string|null        $key           The type of service that should be checked
-     *
      * @return array<mixed>
+     * @throws ContainerExceptionInterface
      */
     public function getServiceOptions(ContainerInterface $container, string $requestedName, ?string $key = null): array
     {

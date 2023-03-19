@@ -10,15 +10,8 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
-/**
- * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
- * @package Arp\LaminasFactory
- */
 abstract class AbstractFactory implements FactoryInterface
 {
-    /**
-     * @trait ServiceOptionsProviderTrait
-     */
     use ServiceOptionsProviderTrait;
 
     /**
@@ -35,25 +28,18 @@ abstract class AbstractFactory implements FactoryInterface
     }
 
     /**
-     * @param ContainerInterface $container     The dependency injection container.
-     * @param mixed              $name          The name of the service to retrieved.
-     * @param string             $requestedName The service that is being created.
-     *
-     * @return mixed
-     *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      * @throws ContainerExceptionInterface
      */
-    protected function getService(ContainerInterface $container, $name, string $requestedName)
+    protected function getService(ContainerInterface $container, mixed $name, string $requestedName): mixed
     {
-        // Returning non-string arguments reduces factory logic for options that may have already
-        // been resolved to the required services
+        // Returning non-string arguments reduces factory logic for options that may have already been resolved
         if (!is_string($name)) {
             return $name;
         }
 
-        if (!class_exists($name, true) && !$container->has($name)) {
+        if (!class_exists($name) && !$container->has($name)) {
             throw new ServiceNotFoundException(
                 sprintf(
                     'The required \'%s\' dependency could not be found while creating service \'%s\'',
@@ -82,14 +68,7 @@ abstract class AbstractFactory implements FactoryInterface
     }
 
     /**
-     * Create a new service instance using the provided $options.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param string                  $name
-     * @param array<mixed>|null       $options
-     * @param string                  $requestedName
-     *
-     * @return mixed
+     * @param array<mixed>|null $options
      *
      * @throws ServiceNotCreatedException
      * @throws ContainerExceptionInterface
@@ -99,7 +78,7 @@ abstract class AbstractFactory implements FactoryInterface
         string $name,
         ?array $options,
         string $requestedName
-    ) {
+    ): mixed {
         try {
             return $serviceLocator->build($name, $options);
         } catch (\Exception $e) {

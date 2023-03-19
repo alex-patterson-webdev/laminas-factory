@@ -9,30 +9,13 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
-/**
- * Trait used to provide the application options to a factory.
- *
- * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
- * @package Arp\LaminasFactory
- */
 trait ApplicationOptionsProviderTrait
 {
-    /**
-     * @var string
-     */
     protected string $applicationOptionsKey = 'arp';
 
-    /**
-     * @var string
-     */
     private string $applicationOptionsService = 'config';
 
     /**
-     * Return an array of application options.
-     *
-     * @param ContainerInterface $container
-     * @param string|null        $optionsKey
-     *
      * @return array<mixed>
      *
      * @throws ServiceNotFoundException
@@ -70,7 +53,7 @@ trait ApplicationOptionsProviderTrait
         $options = $options[$this->applicationOptionsKey];
 
         if ($options instanceof \Traversable) {
-            $options = iterator_to_array($options, true);
+            $options = iterator_to_array($options);
         }
 
         if (!is_array($options)) {
@@ -87,9 +70,6 @@ trait ApplicationOptionsProviderTrait
         return $options;
     }
 
-    /**
-     * @param string $optionsKey
-     */
     public function setApplicationOptionsKey(string $optionsKey): void
     {
         $this->applicationOptionsKey = $optionsKey;

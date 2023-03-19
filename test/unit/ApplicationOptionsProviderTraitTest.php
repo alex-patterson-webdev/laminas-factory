@@ -12,40 +12,25 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 /**
- * @covers  \Arp\LaminasFactory\ApplicationOptionsProviderTrait
- *
- * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
- * @package ArpTest\LaminasFactory
+ * @covers \Arp\LaminasFactory\ApplicationOptionsProviderTrait
  */
 final class ApplicationOptionsProviderTraitTest extends TestCase
 {
     /**
      * @var ContainerInterface&MockObject
      */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var string
-     */
     private string $optionsKey = 'arp';
 
-    /**
-     * @var string
-     */
     private string $optionsService = 'config';
 
-    /**
-     * Setup the test dependencies.
-     */
     public function setUp(): void
     {
         $this->container = $this->createMock(ContainerInterface::class);
     }
 
     /**
-     * Assert that the getApplicationOptions() method will throw a ServiceNotFoundException if the configured
-     * application service cannot be found within the container.
-     *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      */
@@ -74,9 +59,6 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
     }
 
     /**
-     * Assert that a ServiceNotCreatedException is thrown when the returned ApplicationOptionsService is not of
-     * type array.
-     *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      */
@@ -109,9 +91,6 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
     }
 
     /**
-     * Assert that a ServiceNotCreatedException is thrown when the returned ApplicationOptionsService does not
-     * container a array key matching the options key.
-     *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      */
@@ -148,8 +127,6 @@ final class ApplicationOptionsProviderTraitTest extends TestCase
     }
 
     /**
-     * Assert that a ServiceNotCreatedException is thrown when the resolved service options are not of type array.
-     *
      * @throws ServiceNotCreatedException
      * @throws ServiceNotFoundException
      */
