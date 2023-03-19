@@ -84,10 +84,9 @@ abstract class AbstractFactory implements FactoryInterface
         } catch (\Exception $e) {
             throw new ServiceNotCreatedException(
                 sprintf(
-                    'Failed to build service \'%s\' required as dependency of service \'%s\' : %s',
+                    'Failed to build service \'%s\' required as dependency of service \'%s\'',
                     $name,
-                    $requestedName,
-                    $e->getMessage()
+                    $requestedName
                 ),
                 $e->getCode(),
                 $e

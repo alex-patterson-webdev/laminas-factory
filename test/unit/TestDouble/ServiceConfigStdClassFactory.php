@@ -38,6 +38,8 @@ class ServiceConfigStdClassFactory extends AbstractFactory
 
     /**
      * @param array<mixed>|null $options
+     *
+     * @throws ContainerExceptionInterface
      */
     public function __invoke(
         ContainerInterface $container,

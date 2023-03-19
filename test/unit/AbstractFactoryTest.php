@@ -6,10 +6,12 @@ namespace ArpTest\LaminasFactory;
 
 use Arp\LaminasFactory\AbstractFactory;
 use Arp\LaminasFactory\FactoryInterface;
+use ArpTest\LaminasFactory\TestDouble\BuildServiceStdClassFactory;
 use ArpTest\LaminasFactory\TestDouble\GetServiceStdClassFactory;
 use ArpTest\LaminasFactory\TestDouble\ServiceConfigStdClassFactory;
-use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -59,6 +61,9 @@ final class AbstractFactoryTest extends TestCase
         $this->assertInstanceOf(FactoryInterface::class, $factory);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     */
     public function testInvokeWillReturnConfiguredStdClass(): void
     {
         $applicationOptionsService = 'config';
@@ -144,15 +149,16 @@ final class AbstractFactoryTest extends TestCase
 
         $factory = new GetServiceStdClassFactory($dependencyName);
 
-        /** @var ContainerException&MockObject $exception */
-        $exception = $this->getMockForAbstractClass(ContainerException::class);
+        /** @var ContainerExceptionInterface&MockObject $exception */
+        $exception = new class () extends \Exception implements ContainerExceptionInterface {
+        };
 
         $this->container->expects($this->once())
             ->method('get')
             ->with($dependencyName)
             ->willThrowException($exception);
 
-        $this->expectException(ContainerException::class);
+        $this->expectException(ContainerExceptionInterface::class);
 
         $factory($this->container, $requestedName);
     }
@@ -168,7 +174,6 @@ final class AbstractFactoryTest extends TestCase
         $factory = new GetServiceStdClassFactory($dependencyName);
 
         $exceptionCode = 777;
-        /** @var ContainerException&MockObject $exception */
         $exception = new \Exception(
             'This is a test exception for test ' . __FUNCTION__,
             $exceptionCode
@@ -190,5 +195,40 @@ final class AbstractFactoryTest extends TestCase
         );
 
         $factory($this->container, $requestedName);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     */
+    public function testBuildServiceWillThrowServiceNotCreatedExceptionIfTheProvidedServiceIsNotAValidService(): void
+    {
+        $requestedName = 'FooService';
+        $dependencyName = 'BarService';
+        $options = [
+            'foo' => true,
+        ];
+
+        $factory = new BuildServiceStdClassFactory($dependencyName);
+
+        /** @var ServiceLocatorInterface&MockObject $container */
+        $container = $this->createMock(ServiceLocatorInterface::class);
+
+        $exception = new \Exception('This is a test exception message');
+
+        $container->expects($this->once())
+            ->method('build')
+            ->with($dependencyName, $options)
+            ->willThrowException($exception);
+
+        $this->expectException(ServiceNotCreatedException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Failed to build service \'%s\' required as dependency of service \'%s\'',
+                $dependencyName,
+                $requestedName
+            ),
+        );
+
+        $factory($container, $requestedName, $options);
     }
 }
