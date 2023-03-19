@@ -2,13 +2,20 @@ build:
   image: default-bionic
   environment:
     php: 8.1
-  project_setup:
-    override:
-      - 'true'
-  tests:
-    override:
-      - php-scrutinizer-run
-      - command: phpcs-run
+  nodes:
+      analysis:
+        dependencies:
+          after:
+            - composer require --dev "squizlabs/php_codesniffer=3.6.2"
+      php8:
+        project_setup:
+          override:
+            - 'true'
+        tests:
+          override:
+            - php-scrutinizer-run
+            - command: phpcs-run
+              use_website_config: false
 checks:
   php: true
 coding_style:
