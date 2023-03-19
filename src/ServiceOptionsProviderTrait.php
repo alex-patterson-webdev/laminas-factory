@@ -37,6 +37,7 @@ trait ServiceOptionsProviderTrait
             );
         }
 
+        /** @phpstan-ignore-next-line Right side of && is always true */
         $serviceOptions = (isset($this->factoryOptions) && is_array($this->factoryOptions))
             ? $this->factoryOptions
             : [];
