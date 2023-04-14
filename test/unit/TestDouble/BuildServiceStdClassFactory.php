@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace ArpTest\LaminasFactory\TestDouble;
 
 use Arp\LaminasFactory\AbstractFactory;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
-class GetServiceStdClassFactory extends AbstractFactory
+class BuildServiceStdClassFactory extends AbstractFactory
 {
     /**
      * @param array<mixed>|null $factoryOptions
@@ -19,11 +20,13 @@ class GetServiceStdClassFactory extends AbstractFactory
     }
 
     /**
+     * @param ContainerInterface&ServiceLocatorInterface $container
+     *
      * @throws ContainerExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): \stdClass
+    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): \StdClass
     {
-        $dependency = $this->getService($container, $this->dependency, $requestedName);
+        $dependency = $this->buildService($container, $this->dependency, $options, $requestedName);
 
         $service = new \stdClass();
         $service->dependency = $dependency;

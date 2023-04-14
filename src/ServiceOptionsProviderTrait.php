@@ -9,29 +9,13 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
-/**
- * Trait used to provide service options to factories.
- *
- * @author  Alex Patterson <alex.patterson.webdev@gmail.com>
- * @package Arp\LaminasFactory
- */
 trait ServiceOptionsProviderTrait
 {
-    /**
-     * @trait ApplicationOptionsProviderTrait
-     */
     use ApplicationOptionsProviderTrait;
 
-    /**
-     * @var string
-     */
     private string $serviceOptionsKey = 'services';
 
     /**
-     * @param ContainerInterface $container     The dependency injection container
-     * @param string             $requestedName The name of the service being created
-     * @param string|null        $key           The type of service that should be checked
-     *
      * @return array<mixed>
      *
      * @throws ServiceNotCreatedException
@@ -53,6 +37,7 @@ trait ServiceOptionsProviderTrait
             );
         }
 
+        /** @phpstan-ignore-next-line Right side of && is always true */
         $serviceOptions = (isset($this->factoryOptions) && is_array($this->factoryOptions))
             ? $this->factoryOptions
             : [];
@@ -76,11 +61,6 @@ trait ServiceOptionsProviderTrait
         return $serviceOptions;
     }
 
-    /**
-     * @param string|null $key
-     *
-     * @return string
-     */
     private function getServiceOptionsKey(?string $key): string
     {
         return $key ?? $this->serviceOptionsKey;
