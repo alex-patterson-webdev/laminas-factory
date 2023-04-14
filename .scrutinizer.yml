@@ -2,14 +2,13 @@ build:
   image: default-bionic
   environment:
     php: 8.1
-  nodes:
-    php8:
-      project_setup:
-        override:
-          - 'true'
-      tests:
-        override:
-          - php-scrutinizer-run
+  project_setup:
+    override:
+      - 'true'
+  tests:
+    override:
+      - php-scrutinizer-run
+      - command: phpcs-run
 checks:
   php: true
 coding_style:
